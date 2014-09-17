@@ -7,24 +7,30 @@
 * // emacs hint to show this file as Javascript
 */
 
-var os = require('os'),
+var colors = require('colors'),
+os = require('os'),
 readline = require('readline'),
 rubberduck = require('..');
 
+var prompt = '> ';
+
 var quits = {
-  'bye' : 'see ya',
+  'bye' : 'See ya',
+  'exit' : 'Good luck',
+  'quit' : 'OK bye',
   'thanks' : 'Nice talking to you'
 }
+
+process.stdin.setEncoding('utf8');
+process.stdout.setEncoding('utf8');
 
 var terminal = readline.createInterface({
   input: process.stdin,
   output: process.stdout
-});
-
-terminal.setPrompt('> ');
+})
 
 function quit(message){
-  terminal.write(message + os.EOL);
+  terminal.write(message.yellow + os.EOL);
   terminal.close();
   process.exit(0);
 }
@@ -34,12 +40,11 @@ process.on('SIGINT', quit);
 function response(question){
 
   var lowered = question.toLowerCase();
-  if(quits.hasOwnProperty(lowered)) return quit(quits[lowered]);
-  
+  if(quits.hasOwnProperty(lowered)) return quit(quits[lowered] + os.EOL);
   rubberduck.ask(question, function(err, result){
     if(err) result = 'I didn\'t understand that, can you say it clearer? ';
-    terminal.question(result + ' ', response);
+    terminal.question(prompt + result.yellow, response);
   });
 }
 
-terminal.question('Whatcha working on? ', response);
+terminal.question((prompt + 'Whatcha working on? '.yellow + os.EOL), response);
