@@ -1,0 +1,31 @@
+{
+  "name": "rubber-duck",
+  "version": "0.0.0",
+  "description": "CLI tool for implementing \"Rubber Duck\" debugging.",
+  "main": "index.js",
+  "bin" : {
+    "rubberduck" : "./bin/rubber-duck"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tleen/rubber-duck.git"
+  },
+  "keywords": [
+    "debugging",
+    "rubber",
+    "duck",
+    "quack"
+  ],
+  "author": {
+    "name" : "Tom Leen",
+    "email" : "tl@thomasleen.com",
+    "url" : "http://www.thomasleen.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tleen/rubber-duck/issues"
+  }
+}

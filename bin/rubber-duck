@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+'use strict';
+/*
+* Local Variables:
+* mode: Javascript
+* End:
+* // emacs hint to show this file as Javascript
+*/
+
+console.log('rubber-duck called');
