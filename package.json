@@ -27,5 +27,8 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tleen/rubber-duck/issues"
+  },
+  "dependencies" : {
+    "pos" : "0.1.7"
   }
 }
