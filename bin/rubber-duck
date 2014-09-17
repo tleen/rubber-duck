@@ -35,7 +35,6 @@ function quit(message){
   process.exit(0);
 }
 
-process.on('SIGINT', quit);
 
 function response(question){
 
@@ -43,7 +42,7 @@ function response(question){
   if(quits.hasOwnProperty(lowered)) return quit(quits[lowered] + os.EOL);
   rubberduck.ask(question, function(err, result){
     if(err) result = 'I didn\'t understand that, can you say it clearer? ';
-    terminal.question(prompt + result.yellow, response);
+    terminal.question((prompt + result).yellow + os.EOL, response);
   });
 }
 
