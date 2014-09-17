@@ -46,4 +46,4 @@ function response(question){
   });
 }
 
-terminal.question((prompt + 'Whatcha working on? '.yellow + os.EOL), response);
+terminal.question(((prompt + 'Whatcha working on? ').yellow + os.EOL), response);
