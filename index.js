@@ -4,7 +4,13 @@ var pos = require('pos'),
 S = require('string'),
 _ = require('lodash');
 
-// need more of these
+/*
+* todo
+* - move initial gathering templates to external file
+* - make module export instance
+* - store all bucketed data for conversation
+* - use bucketed data to created more detailed qurstions later 
+*/
 var templates = {
   N : [
     'Ugh, {{word}}, may be worth looking at libraries that handle {{word}}.',
