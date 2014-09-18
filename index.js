@@ -6,6 +6,7 @@ _ = require('lodash');
 
 /*
 * todo
+* - Grunt + jshint
 * - move initial gathering templates to external file
 * - make module export instance
 * - store all bucketed data for conversation
