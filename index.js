@@ -10,7 +10,9 @@ _ = require('lodash');
 * - move initial gathering templates to external file
 * - make module export instance
 * - store all bucketed data for conversation
-* - use bucketed data to created more detailed qurstions later 
+* - use bucketed data to created more detailed questions later
+* - add tests
+* - add to Travis
 */
 var templates = {
   N : [
