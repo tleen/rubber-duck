@@ -61,7 +61,7 @@ module.exports = {
     // 1/3rd of the time, switch key
     if(_.random(2) === 2) order.reverse();
     
-    var message = undefined;
+    var message;
 
     order.forEach(function(key){
       if(message || (!rebucketed[key].length)) return;
@@ -75,4 +75,4 @@ module.exports = {
     if(_.isUndefined(message)) return callback(new Error('Unable to parse query'));
     return callback(null, message);
   }
-}
+};
