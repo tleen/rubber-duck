@@ -1,7 +1,7 @@
 {
   "name": "rubber-duck",
-  "version": "0.0.1",
-  "description": "CLI tool for implementing \"Rubber Duck\" debugging.",
+  "version": "1.0.0",
+  "description": "Tool for implementing \"Rubber Duck\" debugging.",
   "main": "index.js",
   "bin" : {
     "rubberduck" : "./bin/rubber-duck"
