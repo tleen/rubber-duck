@@ -1,0 +1,23 @@
+{
+  "empty" : [
+    "Sorry, I couldn't catch that",
+    "What?"
+  ],
+  "initial" : [
+    "What are you thinking about specifically?",
+    "Can you re-phrase?",
+    "Tell me more..."
+  ],
+  "intermediate" : [
+    "Is there an alternative to {{NN}}?",
+    "Are there an alternatives to {{NN:pluralize}}?",
+    "When I {{VB}} something, it helps to take a break",
+    "I don't know much about {{NN:pluralize}}, tell me more?",
+    "Have you tried to not {{VB}}?"
+  ],
+  "advanced" : [
+    "Is trying to {{VB}} with {{NN}} or {{NN:pluralize}} part of the plan?",
+    "I never got the part when you {{VBD}}, is that important?",
+    "Perhaps {{NN:pluralize}} {{MD}} {{VBP}} better than the current approach?"
+  ]
+}

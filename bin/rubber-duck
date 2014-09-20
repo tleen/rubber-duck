@@ -10,7 +10,9 @@
 var colors = require('colors'),
 os = require('os'),
 readline = require('readline'),
-rubberduck = require('..');
+RubberDuck = require('..');
+
+var rd = new RubberDuck();
 
 var prompt = '> ';
 
@@ -37,13 +39,10 @@ function quit(message){
 
 
 function response(question){
-
   var lowered = question.toLowerCase();
   if(quits.hasOwnProperty(lowered)) return quit(quits[lowered] + os.EOL);
-  rubberduck.ask(question, function(err, result){
-    if(err) result = 'I didn\'t understand that, can you say it clearer? ';
-    terminal.question((prompt + result).yellow + os.EOL, response);
-  });
+  var result = rd.exchange(question);
+  terminal.question((prompt + result).yellow + os.EOL, response);
 }
 
 terminal.question(((prompt + 'Whatcha working on? ').yellow + os.EOL), response);

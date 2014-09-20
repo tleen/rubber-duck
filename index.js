@@ -1,78 +1,91 @@
 'use strict';
 
-var pos = require('pos'),
+var pkg = require('./package.json'),
+natural = require('natural'),
+PosAccumulator = require('pos-accumulator'),
 S = require('string'),
 _ = require('lodash');
 
 /*
 * todo
-* - Grunt + jshint
 * - move initial gathering templates to external file
 * - make module export instance
 * - store all bucketed data for conversation
 * - use bucketed data to created more detailed questions later
-* - add tests
 * - add to Travis
 */
-var templates = {
-  N : [
-    'Ugh, {{word}}, may be worth looking at libraries that handle {{word}}.',
-    'Tell me more about {{word}}, I\'m not unfamiliar.'
-  ],
-  V : [
-    'What exactly are you trying to {{word}}',
-    'I\'ve {{word}} before, is there a better way to do it?'
-  ]
-};
-
-
+var templates = require('./templates.json');
 
 function arrayRandom(array){
   var index = _.random(0, array.length - 1);
   return array[index];
 }
 
-module.exports = {
-  ask : function(query, callback){
-    
-    if(_.isEmpty(query)) return callback(new Error('Empty input'));
+var nounInflector = new natural.NounInflector();
 
-    var words = new pos.Lexer().lex(query);
-    var taggedWords = new pos.Tagger().tag(words);
-
-    var bucketed = _.chain(taggedWords).
-      groupBy(function(a){ return a[1]; }).
-      reduce(function(result, bucket, key){	
-	result[key] = _.pluck(bucket,0);
-	return result;
-      }, {}).
-      valueOf();
-
-
-    // this is where things can evolve complicated, for now keep it simple
-    // rebucked into nouns/verbs
-    var rebucketed = _.reduce(bucketed, function(result, bucket, key){
-      var index = key[0];
-      if(_.has(result, index)) result[index] = _.merge(result[index], bucket);
-      return result;
-      }, {N : [], V : []});
-
-    var order = ['N', 'V'];
-    // 1/3rd of the time, switch key
-    if(_.random(2) === 2) order.reverse();
-    
-    var message;
-
-    order.forEach(function(key){
-      if(message || (!rebucketed[key].length)) return;
-
-      var template = arrayRandom(templates[key]);
-      var word = arrayRandom(rebucketed[key]);
-      message = S(template).template({word : word.toLowerCase()});      
-    });
-
-
-    if(_.isUndefined(message)) return callback(new Error('Unable to parse query'));
-    return callback(null, message);
-  }
+var transformers = {
+  echo : function(str){ return str; },
+  pluralize : function(str){ return nounInflector.pluralize(str); }
 };
+
+
+function RubberDuck(){
+  this.exchangeCount = 0;
+  this.accumulator = new PosAccumulator();
+
+  this.handlers = {};
+
+  this.handlers.empty = _.partial(arrayRandom, templates.empty);
+  this.handlers.initial = _.partial(arrayRandom, templates.initial);
+
+  var self = this;
+
+  function substitution(templates){
+    var t = arrayRandom(templates);
+    var dictionary = {}; // retain any previous selections for a type
+
+    // token {{pos[:transformation]}}
+    return t.replace(/\{\{(.*?)\}\}/g, function(match){
+      var directive = match.slice(2,-2).split(':'); // remove brackets
+      var type = directive.shift();
+      var transformer = directive.shift();
+      if(!transformer) transformer = 'echo';
+      // throw error if bad transformer?
+
+      var replacement = 'that';
+      if(dictionary[type]) replacement= dictionary[type]; 
+      else{
+	var replacements = self.accumulator.pos(type);
+	
+	if(replacements) replacement = arrayRandom(replacements).value;
+	dictionary[type] = replacement;
+      }
+      replacement = transformers[transformer].call(null, replacement);
+
+      return replacement;
+    });
+  }
+
+  this.handlers.intermediate = _.partial(substitution, templates.intermediate);
+  this.handlers.advanced = _.partial(substitution, templates.advanced);
+}
+
+RubberDuck.prototype.version = pkg.version;
+
+RubberDuck.prototype.exchange = function(query){
+
+  if(_.isEmpty(query)) return this.handlers.empty();
+
+  this.exchangeCount++;
+  var filtered = query.replace(/'/g, '');
+  this.accumulator.put(filtered);
+
+  var handler = this.handlers.initial;
+  if(this.accumulator.entryCount('NN') !== 0) handler = this.handlers.intermediate;
+  if(this.accumulator.entryCount() > 50) handler = this.handlers.advanced;
+  
+  return handler();
+};
+
+module.exports = RubberDuck;
+

@@ -7,7 +7,7 @@
     "rubberduck" : "./bin/rubber-duck"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/grunt-cafe-mocha/node_modules/mocha/bin/mocha --ui bdd --reporter spec --require should test/index.js"
   },
   "repository": {
     "type": "git",
@@ -31,8 +31,8 @@
   "dependencies" : {
     "colors" : "0.6.2",
     "lodash" : "2.4.1",
-    "pos" : "0.1.7",
-    "pos-accumulator" : "1.0.0",
+    "natural" : "0.1.28",
+    "pos-accumulator" : "1.1.0",
     "string" : "2.0.1"
   },
   "devDependencies" : {
