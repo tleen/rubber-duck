@@ -32,7 +32,7 @@ var terminal = readline.createInterface({
 })
 
 function quit(message){
-  terminal.write(message.yellow + os.EOL);
+  terminal.write((prompt + message).yellow + os.EOL);
   terminal.close();
   process.exit(0);
 }
