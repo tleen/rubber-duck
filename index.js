@@ -31,14 +31,14 @@ var transformers = {
 
 function RubberDuck(){
   this.exchangeCount = 0;
-  this.accumulator = new PosAccumulator();
+
+  var accumulator = new PosAccumulator();
+  this.accumulator = accumulator;
 
   this.handlers = {};
-
   this.handlers.empty = _.partial(arrayRandom, templates.empty);
   this.handlers.initial = _.partial(arrayRandom, templates.initial);
 
-  var self = this;
 
   function substitution(templates){
     var t = arrayRandom(templates);
@@ -55,7 +55,7 @@ function RubberDuck(){
       var replacement = 'that';
       if(dictionary[type]) replacement= dictionary[type]; 
       else{
-	var replacements = self.accumulator.pos(type);
+	var replacements = accumulator.pos(type);
 	
 	if(replacements) replacement = arrayRandom(replacements).value;
 	dictionary[type] = replacement;
